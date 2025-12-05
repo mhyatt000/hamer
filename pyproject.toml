@@ -1,6 +1,19 @@
 [build-system]
-requires = ["setuptools", "wheel", "numpy", "cython"]
-build-backend = "setuptools.build_meta"
+requires = [
+"uv_build>=0.9.15",
+"setuptools", "wheel", "numpy", "cython"
+]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+# uv seems nicer than hatchling
+# make sure to have __init__.py in the src/module folder
+module-name = "hamer"
+module-root = "."
+
+[tool.uv.extra-build-dependencies]
+detectron = ["torch"]
+
 # https://docs.astral.sh/uv/concepts/projects/config/#build-systems
 # https://docs.astral.sh/uv/concepts/projects/config/#build-isolation
 
@@ -12,7 +25,6 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     'smplx==0.1.28',
-    "chumpy @ git+https://github.com/mhyatt000/chumpy",
     'mmcv==1.3.9',
     "webdataset[all]>=0.2.111",
     "colorama>=0.4.6",
@@ -38,6 +50,10 @@ dependencies = [
     "tyro>=0.9.20",
     "jaxlib>=0.6.0",
     "jax[cuda12]>=0.6.0",
+    "torch2jax>=0.1.0",
+    "chumpy",
+    "detectron2",
+    "xtcocotools",
 ]
 
 [project.optional-dependencies]
@@ -48,16 +64,13 @@ server = [
     "tyro>=0.9.19",
     "webpolicy",
 ]
-build = [
-    'detectron2 @ git+https://github.com/facebookresearch/detectron2',
-    "xtcocotools",
-]
 
 [tool.uv]
 no-build-isolation-package = ["xtcocotools", "detectron2"]
 
 [tool.uv.sources]
 webpolicy = { git = "https://github.com/mhyatt000/webpolicy" }
-mmpose = { path = "third-party/ViTPose", editable = true }
 xtcocotools = { git = "https://github.com/mhyatt000/xtcocoapi" }
-
+chumpy = { git = "https://github.com/mhyatt000/chumpy" }
+detectron2 = { git = "https://github.com/facebookresearch/detectron2" }
+mmpose = { git = "https://github.com/ViTAE-Transformer/ViTPose", rev = "d5216452796c90c6bc29f5c5ec0bdba94366768a" }
